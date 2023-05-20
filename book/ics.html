@@ -25,7 +25,7 @@
 </head>
 <body>
 <pre style="color: white">
-[Introdução a ICS e o SCADA para pentest]
+<a style="color: red">[Introdução a ICS e o SCADA para pentest]</a>
 [by Deadline]
 
           ) ) )                     ) ) )
@@ -67,7 +67,7 @@ isso em uma escala de danos é oque mais afeta uma população em caso de guerra
 
 Algums protocolos usandos em ICSs e suas vulnerabilidades:
 
-Modbus:
+<a style="color: red">Modbus</a>:
 
     O objetivo principal do Modbus é permitir a comunicação entre dispositivos mestre (master) e escravo (slave) em uma rede.
     desenvolvido na década de 1970 e ainda é amplamente utilizado hoje em dia, sendo um protocolo antigo está sujeito a diversas falhas,
@@ -78,13 +78,13 @@ Modbus:
                 # msf6> use  auxiliary/admin/scada/modicon_command           
     ou tambem voce pode usar esse framework focado apenas em exploração de Modbus para realizar ataques: https://github.com/C4l1b4n/ModBusSploit
 
-IEC104:
+<a style="color: red">IEC104</a>:
 
     é uma extensão ao protocolo IEC 60870-5-101, utilizado em sistemas de automação e controle de processos industriais, especialmente em sistemas de energia. Ele define protocolos e formatos de mensagens para permitir a troca de dados entre dispositivos em uma rede. roda na porta 2404 e voce pode usa o metasloit como client para o IEC104 e enviar uma lista de comandos
                 # msf > use auxiliary/client/iec104/iec104
 
 
-Siemens S7:
+<a style="color: red">Siemens S7</a>:
     
     família de controladores lógicos programáveis (PLCs) fabricados pela Siemens AG. 
     roda na porta 102 e possui vulnerabilidades e pode ser explorado usando o metasploit ou o framework ISF pra ics https://github.com/dark-lbp/isf
@@ -98,9 +98,9 @@ Siemens S7:
 
 outros protocolos utilizados, voce pode pesquisar mais sobre eles:
 
-    DNP3 (Distributed Network Protocol)
-    EtherNet/IP
-    Profinet
+    <a style="color: red">DNP3 (Distributed Network Protocol)</a>
+    <a style="color: red">EtherNet/IP</a>
+    <a style="color: red">Profinet</a>
 
 
 <a style="color: blue">[5]</a> Considerações finais
