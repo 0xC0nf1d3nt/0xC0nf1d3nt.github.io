@@ -37,26 +37,26 @@
 
 Oque é o Esp e por que 8266?
 
-o esp8266 é um microcontrolador de baixo consumo de ernegia que é muito ultilizado nas IoT da vida ele é fabricado por uma empresa chinesa chamada Espressif Systems O Numero 8266 se refere ao numero do chip que foi fabricado
-O esp8266 pe conhecido Por sua capacidade de se conectar a redes wifi e sua capacidade de processamento, apesar do seu tamanha relativamente pequeno (cabe ate em um bolso) ele possui um processador de 32 bits, memoria flash
+o esp8266 é um micro controlador de baixo consumo de energia que é muito utilizado nas IoT da vida ele é fabricado por uma empresa chinesa chamada Espressif Systems O Numero 8266 se refere ao numero do chip que foi fabricado
+O esp8266 é conhecido Por sua capacidade de se conectar a redes wifi e sua capacidade de processamento, apesar do seu tamanha relativamente pequeno (cabe ate em um bolso) ele possui um processador de 32 bits, memoria flash
 embutida e suporte a protocolos de comunicação Wifi como TCP/IP.
 Originalmente o esp8266 foi lançado como um modulo de wifi para facilitar a adição de conectividade a outros dispositivos eletrônicos. No entanto, devido a sua popularidade e versatilidade ele facilmente se tornou um dispositivo
-"unico" com suporte a programação por meio da linguagem c e arduino ide. O esp8266 oferece uma solução acessivel e poderosa para conectar a dispositivos e fazer ataques de redes e outras coisas como captive portal e afins
+"unico" com suporte a programação por meio da linguagem c e arduino ide. O esp8266 oferece uma solução acessível e poderosa para conectar a dispositivos e fazer ataques de redes e outras coisas como captive portal e afins
 
 Tipos De Ataques
 
-o esp8266 com essa praticidade e rapidez e sem puxar muita ernegia para fazer conexões e outras coisas, ele tem uma variedades de ataques para testar apenas usando ele Vou Citar alguns dos ataques deles abaixo:
+o esp8266 com essa praticidade e rapidez e sem puxar muita energia para fazer conexões e outras coisas, ele tem uma variedades de ataques para testar apenas usando ele Vou Citar alguns dos ataques deles abaixo:
 [Caputa De pacotes]
-O esp8266 pode ser configurado para capturar pacotes de rede em uma rede wifi, isso pode ser util para analizar o trafego ou pegar dados e fazer aquele glorioso Sniffin Na rede >:)
+O esp8266 pode ser configurado para capturar pacotes de rede em uma rede wifi, isso pode ser útil para analizar o trafego ou pegar dados e fazer aquele glorioso Sniffin Na rede >:)
 [Ataques brute force]
 sim meio que obvio mais ele pode fazer aqueles de brute force em serviços como ssh, ftp e etc...
 [Ataques De DoS]
-Como ja da para saber ja que ele faz req para brute force ele tambem pode ser usado para derrubar serviços como https e outros eu não acho tão eficas pois ele não tem um processamento muito rapido para processar varios envios
-então ele possivelmente vai brekar em uma parte do caminho se o codigo não for bem codado para usufluir ao maximo a capacidade do esp8266
+Como ja da para saber ja que ele faz requisições para brute force ele também pode ser usado para derrubar serviços como https e outros eu não acho tão eficaz pois ele não tem um processamento muito rápido para processar varios envios
+então ele possivelmente vai quebrar em uma parte do caminho se o codigo não for bem codado para usufruir ao maximo a capacidade do esp8266
 [hack de wifi]
-O esp8266 tambem pode ser configurado para ataques de rede wifi para testar a criptografia e a eficacia da segurança wifi se aprofeitando de erros de protocolos de criptografia desatualizados.
+O esp8266 tambem pode ser configurado para ataques de rede wifi para testar a criptografia e a eficácia da segurança wifi se aprofeitando de erros de protocolos de criptografia desatualizados.
 [Ataques De Phising (Captive Portal)]
-Fingir que Você é Aquela pagina de login de wifi da faculdade ou do trabalho é possivel com o esp8266 para pegar senhas e logins de usuarios desatentos combinados com o ataque de DoS na rede original Você Vai ter uma boa vantagem.
+Fingir que Você é Aquela pagina de login de wifi da faculdade ou do trabalho é possível com o esp8266 para pegar senhas e logins de usuarios desatentos combinados com o ataque de DoS na rede original Você Vai ter uma boa vantagem.
 Mais Enfim Vamos Para oque interessa que eu vou focar agora no ataque De Captive Portal
 
 Como fazer o ataque de captive portal?
@@ -66,7 +66,7 @@ Vamos la pois vou apresentar oque agente vai ter que fazer para o ataque for bem
 Server Web Embutido para servir as paginas do portal
 Vamos para o setup disso tudo irei usar um codigo Fornecido Do github e mostrar como funciona:
 [Importar as livrarias]
-Com o Arduino Ide Aberto E o setup do arduino ide feito para o esp8266 vamos apenas adicionar as livrarias Nessecarias E Vou Fazer com o exemplo de pagina de login da google :)
+Com o Arduino Ide Aberto E o setup do arduino ide feito para o esp8266 vamos apenas adicionar as livrarias Necessárias E Vou Fazer com o exemplo de pagina de login da google :)
 
 _________________________________
 #include <ESP8266WiFi.h>
